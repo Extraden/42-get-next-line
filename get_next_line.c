@@ -1,48 +1,34 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dsemenov <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/01/12 17:57:33 by dsemenov          #+#    #+#             */
+/*   Updated: 2025/01/12 17:57:35 by dsemenov         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <fcntl.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include "get_next_line.h"
 
-char  *ft_strjoin(char *dest, char *src)
-{
-  size_t  i;
-  size_t  j;
-
-  i = 0;
-  j = 0;
-  while (dest[i])
-    i++;
-  while (src[j])
-  {
-    dest[i] = src[j];
-    i++;
-    j++;
-  }
-  dest[i] = '\0';
-  return (dest);
-}
-
-size_t  ft_strlen(char *str)
-{
-  size_t  len;
-
-  len = 0;
-  while (str[len] != '\0')
-    len++;
-  return (len);
-}
+#define BUFFER_SIZE 20
 
 char  *get_next_line(int fd)
 {
   size_t  len;
-  char  buffer[1024];
+  char  buffer[BUFFER_SIZE + 1];
   char  *line;
+  size_t  bytes_read;
 
-  read(fd, buffer, 20);
-  line = malloc(20);
-  line[0] = '\0';
+  bytes_read = read(fd, buffer, BUFFER_SIZE);
+  buffer[BUFFER_SIZE] = '\0';
+  line = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
   ft_strjoin(line, buffer);
-  printf("%s\n", buffer);
   return (line);
 }
 
@@ -53,5 +39,8 @@ int main()
 
   fd = open("./text", O_RDONLY);
   res = get_next_line(fd);
+  printf("%s\n", res);
+  res = get_next_line(fd) ;
   printf("%s", res);
 }
+ 
