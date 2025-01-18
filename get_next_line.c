@@ -6,7 +6,7 @@
 /*   By: dsemenov <dsemenov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:57:33 by dsemenov          #+#    #+#             */
-/*   Updated: 2025/01/18 20:13:53 by dsemenov         ###   ########.fr       */
+/*   Updated: 2025/01/18 20:25:20 by dsemenov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,19 +32,18 @@ static char	*read_to_remainder(int fd, char *remainder)
     	free(buffer);
 			return (NULL);
     }
-	}
 	buffer[bytes_read] = '\0';
 	tmp = ft_strjoin(remainder, buffer);
-	// if (!tmp)
-	// {
-	// 	free(buffer);
-	// 	return (NULL);
-	// }
-	// free(remainder);
-	// remainder = tmp;
-	// }
-	// free(buffer);
-	return (buffer);
+	if (!tmp)
+	{
+		free(buffer);
+		return (NULL);
+	}
+	free(remainder);
+	remainder = tmp;
+	}
+	free(buffer);
+	return (remainder);
 }
 
 char	*get_next_line(int fd)
@@ -66,6 +65,6 @@ int	main(void)
 	fd = open("./text", O_RDONLY);
 	res = get_next_line(fd);
 	printf("%s\n", res);
-	res = get_next_line(fd);
-	printf("%s", res);
+	// res = get_next_line(fd);
+	// printf("%s", res);
 }
