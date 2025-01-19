@@ -6,7 +6,7 @@
 /*   By: dsemenov <dsemenov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:57:33 by dsemenov          #+#    #+#             */
-/*   Updated: 2025/01/19 20:16:05 by dsemenov         ###   ########.fr       */
+/*   Updated: 2025/01/19 20:54:53 by dsemenov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ static char	*read_to_remainder(int fd, char *remainder)
     remainder = ft_strjoin(remainder, buffer);
     if (!remainder)
       return (NULL);
+    free(buffer);
   }
   //remainder = buffer;
   return (remainder);
@@ -88,7 +89,14 @@ int	main(void)
 	int		fd;
 	char	*res;
 
-	fd = open("./text", O_RDONLY);
+	fd = open("./bible.txt", O_RDONLY);
+  res = get_next_line(fd);
+  while (res != NULL)
+  {
+    printf("%s", res);
+    free(res);
+    res = get_next_line(fd);
+  }
 	res = get_next_line(fd);
 	printf("%s", res);
 	res = get_next_line(fd);
