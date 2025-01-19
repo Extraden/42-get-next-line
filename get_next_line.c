@@ -6,7 +6,7 @@
 /*   By: dsemenov <dsemenov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:57:33 by dsemenov          #+#    #+#             */
-/*   Updated: 2025/01/19 17:39:52 by dsemenov         ###   ########.fr       */
+/*   Updated: 2025/01/19 17:58:57 by dsemenov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,8 @@ char	*get_next_line(int fd)
 	return (line);
 }
 
-/*#include <fcntl.h>
+#include <stdio.h>
+#include <fcntl.h>
 
 int	main(void)
 {
@@ -83,4 +84,4 @@ int	main(void)
 	res = get_next_line(fd);
 	printf("%s", res);
 }
-*/
+
