@@ -6,56 +6,71 @@
 /*   By: dsemenov <dsemenov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:57:33 by dsemenov          #+#    #+#             */
-/*   Updated: 2025/01/18 20:25:20 by dsemenov         ###   ########.fr       */
+/*   Updated: 2025/01/19 17:39:52 by dsemenov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <fcntl.h>
-#include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 
 static char	*read_to_remainder(int fd, char *remainder)
 {
-	char	*buffer;
-	char	*tmp;
-	ssize_t	bytes_read;
+  char  *buffer;
+  ssize_t bytes_read;
+  //char  *tmp;
 
-	buffer = (char *)malloc(BUFFER_SIZE + 1);
-	bytes_read = 1;
-	while (bytes_read > 0 && !ft_strchr(remainder, '\n'))
-	{
-		bytes_read = read(fd, buffer, BUFFER_SIZE);
-		if (bytes_read < 0)
+  buffer = (char *) malloc((BUFFER_SIZE + 1) * (sizeof (char)));
+  if (!buffer)
+    return (NULL);
+  bytes_read = 1;
+  while (bytes_read > 0 && !ft_strchr(buffer, '\n'))
+  {
+    bytes_read = read(fd, buffer, BUFFER_SIZE);
+    if (bytes_read < 0)
     {
-    	free(buffer);
-			return (NULL);
+      free(buffer);
+      return (NULL);
     }
-	buffer[bytes_read] = '\0';
-	tmp = ft_strjoin(remainder, buffer);
-	if (!tmp)
-	{
-		free(buffer);
-		return (NULL);
-	}
-	free(remainder);
-	remainder = tmp;
-	}
-	free(buffer);
-	return (remainder);
+    buffer[bytes_read] = '\0';
+    remainder = ft_strjoin(remainder, buffer);
+    if (!remainder)
+      return (NULL);
+  }
+  //remainder = buffer;
+  return (remainder);
+}
+
+static char *extract_line(char *remainder)
+{
+  char  *line;
+  size_t i;
+
+  i = 0;
+  while (remainder[i] && remainder[i] != '\n')
+   i++; 
+  if (remainder[i] == '\n')
+    i++;
+  line = ft_substr(remainder, 0, i);
+  if (!line)
+    return (NULL);
+  return (line);
 }
 
 char	*get_next_line(int fd)
 {
-	static char	*remainder;
-	char		*line;
+	static char *remainder;
+  char  *line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	remainder = read_to_remainder(fd, remainder);
-	return (remainder);
+  line = extract_line(remainder);
+
+	return (line);
 }
+
+/*#include <fcntl.h>
 
 int	main(void)
 {
@@ -65,6 +80,7 @@ int	main(void)
 	fd = open("./text", O_RDONLY);
 	res = get_next_line(fd);
 	printf("%s\n", res);
-	// res = get_next_line(fd);
-	// printf("%s", res);
+	res = get_next_line(fd);
+	printf("%s", res);
 }
+*/
