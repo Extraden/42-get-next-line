@@ -6,7 +6,7 @@
 /*   By: dsemenov <dsemenov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:57:33 by dsemenov          #+#    #+#             */
-/*   Updated: 2025/01/19 17:58:57 by dsemenov         ###   ########.fr       */
+/*   Updated: 2025/01/19 20:16:05 by dsemenov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,15 @@ static char *extract_line(char *remainder)
   return (line);
 }
 
+static char *clean_remainder(char *remainder)
+{
+  remainder = ft_strchr(remainder, '\n');
+  if (!remainder)
+    return (NULL);
+  remainder++;
+  return (remainder);
+}
+
 char	*get_next_line(int fd)
 {
 	static char *remainder;
@@ -66,10 +75,11 @@ char	*get_next_line(int fd)
 		return (NULL);
 	remainder = read_to_remainder(fd, remainder);
   line = extract_line(remainder);
+  remainder = clean_remainder(remainder);
 
 	return (line);
 }
-
+/*
 #include <stdio.h>
 #include <fcntl.h>
 
@@ -80,8 +90,10 @@ int	main(void)
 
 	fd = open("./text", O_RDONLY);
 	res = get_next_line(fd);
-	printf("%s\n", res);
+	printf("%s", res);
+	res = get_next_line(fd);
+	printf("%s", res);
 	res = get_next_line(fd);
 	printf("%s", res);
 }
-
+*/
