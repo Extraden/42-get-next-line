@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dsemenov <dsemenov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/01/12 17:57:33 by dsemenov          #+#    #+#             */
-/*   Updated: 2025/01/20 19:54:09 by dsemenov         ###   ########.fr       */
+/*   Updated: 2025/01/20 19:55:45 by dsemenov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 #include <stdlib.h>
 #include <unistd.h>
 
@@ -99,29 +99,29 @@ static char	*clean_remainder(char *remainder)
 
 char	*get_next_line(int fd)
 {
-	static char	*remainder;
+	static char	*remainder[FD];
 	char		*line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	remainder = read_to_remainder(fd, remainder);
-	if (!remainder)
+	remainder[fd] = read_to_remainder(fd, remainder[fd]);
+	if (!remainder[fd])
 		return (NULL);
-	line = extract_line(remainder);
+	line = extract_line(remainder[fd]);
 	if (!line)
 	{
-		free(remainder);
-		remainder = NULL;
+		free(remainder[fd]);
+		remainder[fd] = NULL;
 		return (NULL);
 	}
 	if (!line[0])
 	{
 		free(line);
-		free(remainder);
-		remainder = NULL;
+		free(remainder[fd]);
+		remainder[fd] = NULL;
 		return (NULL);
 	}
-	remainder = clean_remainder(remainder);
+	remainder[fd] = clean_remainder(remainder[fd]);
 	return (line);
 }
 /*
